@@ -9,8 +9,11 @@
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
+    "autoprefixer": "^9.6.1",
     "core-js": "^2.6.5",
+    "vant": "^2.0.5",
     "vue": "^2.6.10",
+    "vue-route-transition": "^1.1.1",
     "vue-router": "^3.0.3",
     "vuex": "^3.0.1"
   },
@@ -21,12 +24,24 @@
     "@vue/cli-service": "^3.11.0",
     "@vue/eslint-config-airbnb": "^4.0.0",
     "@vue/test-utils": "1.0.0-beta.29",
+    "advanced": "^0.4.7",
+    "axios": "^0.19.0",
     "babel-eslint": "^10.0.1",
+    "babel-plugin-import": "^1.12.1",
     "chai": "^4.1.2",
+    "cssnano": "^4.1.10",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
     "less": "^3.0.4",
     "less-loader": "^5.0.0",
+    "postcss-aspect-ratio-mini": "^1.0.1",
+    "postcss-cssnext": "^3.1.0",
+    "postcss-import": "^12.0.1",
+    "postcss-px-to-viewport": "^1.1.1",
+    "postcss-url": "^8.0.0",
+    "postcss-write-svg": "^3.0.1",
+    "postcss-zindex": "^4.0.1",
+    "vue-cli-plugin-vant": "^1.0.1",
     "vue-template-compiler": "^2.6.10"
   }
 }
