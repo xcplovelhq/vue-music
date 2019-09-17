@@ -2,10 +2,11 @@
   <div class="vue-route-transition">
     <transition :name="state.pageDirection" @leave="setRouterMap">
       <keep-alive v-if="this.keepAlive===true && $route.meta.keepAlive!==false">
-        <router-view></router-view>
+        <router-view class="body"></router-view>
       </keep-alive>
-      <router-view v-else></router-view>
+      <router-view v-else class="body"></router-view>
     </transition>
+    <slot></slot>
   </div>
 </template>
 <script>

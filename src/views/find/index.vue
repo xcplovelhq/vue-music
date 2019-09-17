@@ -1,14 +1,15 @@
 <template>
   <router-layout>
     <div class="find">
-
-      <div class="defaultSpacing">
-        <van-nav-bar
+      <van-nav-bar
           title="标题"
           left-text="返回"
           right-text="按钮"
           slot="header"
-        />
+        >
+        <play-gif slot="right"></play-gif>
+        </van-nav-bar>
+      <div class="defaultSpacing">
         <div class="m-banner">
           <van-swipe :autoplay="3000" indicator-color="white">
             <van-swipe-item height="130" class="m-item" v-for="item in bannerList" :key="item.key">
@@ -36,19 +37,18 @@
       </van-cell>
       <div class="m-list defaultSpacing">
         <template v-for="(item,idx) in songList">
-            <div class="m-list-item"
+          <div class="m-list-item"
             :key="item.key"
-            v-if="idx < 6">
+            v-if="idx < 6"
+            @click="handleGo(item)">
               <div class="m-img">
                 <img :src="item.picUrl" />
-                <div class="m-tips">
-                  
-                </div>
+                  <play-count :playCount="item.playCount"></play-count>
               </div>
               <div class="m-text">
                 {{item.name}}
               </div>
-            </div>
+          </div>
         </template>
       </div>
     </div>
@@ -58,7 +58,8 @@
 <script>
 import { NavBar, Swipe, SwipeItem, Grid, GridItem,Cell,Button } from 'vant';
 import { getBanner,getPersonalized } from '@/api/find';
-
+import PlayGif from '@/components/PlayGif'
+import PlayCount  from '@/components/PlayCount'
 export default {
   components: {
     [NavBar.name]: NavBar,
@@ -68,6 +69,8 @@ export default {
     [GridItem.name]: GridItem,
     [Cell.name]: Cell,
     [Button.name]: Button,
+    PlayCount,
+    PlayGif
   },
   data() {
     return {
@@ -108,6 +111,9 @@ export default {
         this.songList = data.result
         console.log(data);
       })
+    },
+    handleGo(item){
+      this.$router.push({name: 'songSheet', query: {id: item.id}})
     }
   },
 };
@@ -146,10 +152,12 @@ export default {
     flex-wrap: wrap;
     justify-content: space-between;
     .m-list-item{
+      position: relative;
       width: 32%;
       margin-bottom: 10px;
       .m-img{
         border-radius: 6px;
+        height: 109px;
         overflow: hidden;
       }
       .m-text{
@@ -159,6 +167,7 @@ export default {
         -webkit-box-orient:vertical;
         -webkit-line-clamp:2; 
         font-size: 12px;
+        color: #333;
       }
     }
   }

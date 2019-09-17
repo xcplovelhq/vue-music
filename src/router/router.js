@@ -7,7 +7,8 @@ const Find = resolve => require(['@/views/find/index'], resolve);
 const Ranking = resolve => require(['@/views/find/ranking'], resolve);
 const My = resolve => require(['@/views/my/index'], resolve);
 const Account = resolve => require(['@/views/account/index'], resolve);
-
+const SongSheet = resolve => require(['@/views/song-sheet/index'], resolve);
+const Playing = resolve => require(['@/views/playing/index'],resolve)
 Vue.use(Router);
 
 export default new Router({
@@ -55,6 +56,24 @@ export default new Router({
       meta: {
         title: '排行榜',
         keepAlive: true,
+      },
+    },
+    {
+      path: '/song-sheet',
+      name: 'songSheet',
+      component: SongSheet,
+      meta: {
+        title: '歌单',
+        keepAlive: true,
+      },
+    },
+    {
+      path: '/playing',
+      name: 'playing',
+      component: Playing,
+      meta: {
+        title: '播放',
+        keepAlive: false,
       },
     },
   ],

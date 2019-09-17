@@ -28,17 +28,17 @@ export const getDjprogram = async function () {
   });
   return res;
 };
-// 获取最新音乐
-export const getNewsong = async function () {
-  const res = await axios.get({
-    url: '/personalized/newsong',
-  });
-  return res;
-};
 // 获取所有榜单内容摘要
 export const getToplistDetail = async function () {
   const res = await axios.get({
     url: '/toplist/detail',
+  });
+  return res;
+};
+//获取歌单详情
+export const getPlaylistDetail = async function(id) {
+  const res = await axios.get({
+      url: `/playlist/detail?id=${id}`
   });
   return res;
 };
