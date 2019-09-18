@@ -34,7 +34,7 @@ export default new Router({
           name: 'my',
           component: My,
           meta: {
-            title: '发现',
+            title: '我的',
             keepAlive: true,
           },
         },
@@ -64,7 +64,7 @@ export default new Router({
       component: SongSheet,
       meta: {
         title: '歌单',
-        keepAlive: true,
+        keepAlive: false,
       },
     },
     {

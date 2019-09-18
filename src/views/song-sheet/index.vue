@@ -37,7 +37,8 @@
           <van-sticky :container="container" :offset-top="46">
             <div class="m-title"><i class="iconfont i-icon"></i>播放全部<span class="m-text">(共{{playlist.length}}首)</span></div>
           </van-sticky>
-          <div class="m-list" v-for="(item,idx) in playlist" :key="item.key">
+          <van-loading color="#d33a31" style="text-align: center;padding-top: 20px" v-if="playlist.length <= 0" />
+          <div class="m-list" v-else v-for="(item,idx) in playlist" :key="item.key">
             <div class="just-between" @click="handleShow(item)">
               <div class="m-num">{{ idx+1 }}</div>
               <div class="m-right just-between">
@@ -58,8 +59,8 @@
 </template>
 
 <script>
-import { getPlaylistDetail } from "@/api/find";
-import { NavBar,Popup,Sticky   } from "vant";
+import { getPlaylistDetail } from "@/api/playlist";
+import { NavBar,Popup,Sticky,Loading   } from "vant";
 import PlayCount  from '@/components/PlayCount'
 import Avata from '@/components/Avata'
 import SongModel from './components/song-model'
@@ -69,7 +70,7 @@ export default {
     [NavBar.name]: NavBar,
     [Popup.name]: Popup,
     [Sticky.name]: Sticky,
-
+    [Loading.name]: Loading,
     PlayCount,
     Avata,
     SongModel,

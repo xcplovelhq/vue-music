@@ -15,18 +15,27 @@
       <div class="m-label">
         标签：<span class="m-label-text" v-for="item in detailsInfo.tags" :key="item.key">{{item}}</span>
       </div>
-      <div class="m-text">
-        {{detailsInfo.description}}
+      <div class="m-text" v-html="formatText">
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import {formatEnter} from '@/utils/utils'
 export default {
 	props: {
 		detailsInfo: Object
-	},
+  },
+  created(){
+    console.log(formatEnter );
+    
+  },
+  computed:{
+    formatText(){
+      return formatEnter(this.detailsInfo.description)
+    }
+  },
 	methods:{
 		handleClose(){
 			this.$emit('handle-close')

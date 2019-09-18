@@ -44,11 +44,15 @@
         </div>
         <div class="m-range">
           <input
+						v-model="played"
             type="range"
             min="0"
             max="1"
+						ref="input"
             step="any"
             value="0"
+						@touchstart="handleMousedown"
+						@touchend="handleMouseUp"
 						@change="handleChange"
             style="width: 100%;">
         </div>
@@ -60,10 +64,11 @@
         style="width: 0; height: 0;">
         <audio
 					ref="audio"
-					@canplay="getDuration"
           :src="getMusicUrl"
           preload="auto"
-					@timeupdate="handleTimeupdate"
+					@canplay="getDuration"
+					@timeupdate="getTimeupdate"
+					@ended="getEnded"
           style="width: 100%; height: 100%;"
         ></audio>
       </div>
@@ -88,10 +93,13 @@ import { NavBar,Icon } from 'vant';
 export default {
 	data(){
 		return {
+			seeking: false,
 			playing: false,
 			played: 0,
 			duration: 0,
-			audio: null
+			audio: null,
+			input: null,
+			currentTime: 0
 		}
 	},
 	
@@ -110,17 +118,41 @@ export default {
 	mounted(){
 		this.$nextTick(() => {
 			this.audio = this.$refs.audio;
+			this.input = this.$refs.input;
+			this.input.onMouseDown = function (){
+				console.log('4141312');
+				
+			};
 		})
 	},
 	methods:{
+		handleMousedown(e){
+      this.seeking =  true;
+		},
+		handleMouseUp(e) {
+        this.seeking =  false;
+        this.player = parseFloat(e.target.value);
+    },
+		getEnded(e){
+			console.log('结束');
+		},
 		handleBack(){
 			this.$store.commit('playing/getHidePlaying')
 		},
 		getDuration(e){
 			this.duration = this.audio.duration;
 		},
+		// 滑动播放位置触发
 		handleChange(e){
+			// console.log(e);
+			
+			this.audio.currentTime = this.duration * (+e.target.value)
 			this.played = parseFloat(e.target.value)
+			// e.target.onMouseDown = this.handleMousedown(e);
+      // e.target.onMouseUp = this.handleMouseUp(e);
+		},
+		handleProgress(e){
+			console.log(e);
 		},
 		format(seconds) {
 			const date = new Date(seconds * 1000);
@@ -135,9 +167,10 @@ export default {
 		pad(string) {
         return ('0' + string).slice(-2);
 		},
-		handleTimeupdate(row){
-			console.log(row);
-			
+		getTimeupdate(row){
+			if (!this.seeking) {
+				this.played = row.target.currentTime ? (row.target.currentTime / this.duration) : 0;
+      }
 		},
 		handlecurrent(){
 			

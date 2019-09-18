@@ -3,7 +3,8 @@ import {getSongUrl} from '@/api/song.js'
 const state = {
     isShowPlaying: false,
     musicUrl: '',
-    info: {}
+    info: {},
+    songList: []
 }
 
 const mutations = {
@@ -18,13 +19,14 @@ const mutations = {
     },
     setSongInfo: (state, data) => {
         state.info = data
+    },
+    setSongList: (state, data) => {
+        state.songList = data
     }
 }
 const actions = {
     getSongUrlData: ({state,commit},id) => {
         getSongUrl(id || state.info.id).then(({data}) => {
-            console.log(data.data[0].url);
-            
             commit('setMusicUrl',data.data[0].url)
         })
     }

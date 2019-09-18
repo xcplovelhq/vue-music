@@ -35,10 +35,4 @@ export const getToplistDetail = async function () {
   });
   return res;
 };
-//获取歌单详情
-export const getPlaylistDetail = async function(id) {
-  const res = await axios.get({
-      url: `/playlist/detail?id=${id}`
-  });
-  return res;
-};
+
