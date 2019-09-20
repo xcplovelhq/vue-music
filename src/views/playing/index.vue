@@ -89,107 +89,106 @@
 </template>
 
 <script>
-import { NavBar,Icon } from 'vant';
+import { NavBar, Icon } from 'vant';
+
 export default {
-	data(){
-		return {
-			seeking: false,
-			playing: false,
-			played: 0,
-			duration: 0,
-			audio: null,
-			input: null,
-			currentTime: 0
-		}
-	},
-	
-	components: {
-		[NavBar.name]: NavBar,
+  data() {
+    return {
+      seeking: false,
+      playing: false,
+      played: 0,
+      duration: 0,
+      audio: null,
+      input: null,
+      currentTime: 0,
+    };
+  },
+
+  components: {
+    [NavBar.name]: NavBar,
     [Icon.name]: Icon,
-	},
-	computed:{
-		getMusicUrl(){
-			return this.$store.state.playing.musicUrl
-		},
-		info(){
-			return this.$store.state.playing.info
-		}
-	},
-	mounted(){
-		this.$nextTick(() => {
-			this.audio = this.$refs.audio;
-			this.input = this.$refs.input;
-			this.input.onMouseDown = function (){
-				console.log('4141312');
-				
-			};
-		})
-	},
-	methods:{
-		handleMousedown(e){
-      this.seeking =  true;
-		},
-		handleMouseUp(e) {
-        this.seeking =  false;
-        this.player = parseFloat(e.target.value);
+  },
+  computed: {
+    getMusicUrl() {
+      return this.$store.state.playing.musicUrl;
     },
-		getEnded(e){
-			console.log('结束');
-		},
-		handleBack(){
-			this.$store.commit('playing/getHidePlaying')
-		},
-		getDuration(e){
-			this.duration = this.audio.duration;
-		},
-		// 滑动播放位置触发
-		handleChange(e){
-			// console.log(e);
-			
-			this.audio.currentTime = this.duration * (+e.target.value)
-			this.played = parseFloat(e.target.value)
-			// e.target.onMouseDown = this.handleMousedown(e);
+    info() {
+      return this.$store.state.playing.info;
+    },
+  },
+  mounted() {
+    this.$nextTick(() => {
+      this.audio = this.$refs.audio;
+      this.input = this.$refs.input;
+      this.input.onMouseDown = function () {
+        console.log('4141312');
+      };
+    });
+  },
+  methods: {
+    handleMousedown(e) {
+      this.seeking = true;
+    },
+    handleMouseUp(e) {
+      this.seeking = false;
+      this.player = parseFloat(e.target.value);
+    },
+    getEnded(e) {
+      console.log('结束');
+    },
+    handleBack() {
+      this.$store.commit('playing/getHidePlaying');
+    },
+    getDuration(e) {
+      this.duration = this.audio.duration;
+    },
+    // 滑动播放位置触发
+    handleChange(e) {
+      // console.log(e);
+
+      this.audio.currentTime = this.duration * (+e.target.value);
+      this.played = parseFloat(e.target.value);
+      // e.target.onMouseDown = this.handleMousedown(e);
       // e.target.onMouseUp = this.handleMouseUp(e);
-		},
-		handleProgress(e){
-			console.log(e);
-		},
-		format(seconds) {
-			const date = new Date(seconds * 1000);
-			const hh = date.getUTCHours();
-			const mm = date.getUTCMinutes();
-			const ss = this.pad(date.getUTCSeconds());
-			if (hh) {
-					return `${hh}:${this.pad(mm)}:${ss}`;
-			}
-			return `${mm}:${ss}`;
-		},
-		pad(string) {
-        return ('0' + string).slice(-2);
-		},
-		getTimeupdate(row){
-			if (!this.seeking) {
-				this.played = row.target.currentTime ? (row.target.currentTime / this.duration) : 0;
+    },
+    handleProgress(e) {
+      console.log(e);
+    },
+    format(seconds) {
+      const date = new Date(seconds * 1000);
+      const hh = date.getUTCHours();
+      const mm = date.getUTCMinutes();
+      const ss = this.pad(date.getUTCSeconds());
+      if (hh) {
+        return `${hh}:${this.pad(mm)}:${ss}`;
       }
-		},
-		handlecurrent(){
-			
-		},
-		handlePlay(){
-			if(this.playing){
-				this.playing = false;
-				this.audio.pause()
-			}else {
-				this.playing = true;
-				this.audio.play()
-			}
+      return `${mm}:${ss}`;
+    },
+    pad(string) {
+      return (`0${string}`).slice(-2);
+    },
+    getTimeupdate(row) {
+      if (!this.seeking) {
+        this.played = row.target.currentTime ? (row.target.currentTime / this.duration) : 0;
+      }
+    },
+    handlecurrent() {
 
-		},
-		handleNext(){
+    },
+    handlePlay() {
+      if (this.playing) {
+        this.playing = false;
+        this.audio.pause();
+      } else {
+        this.playing = true;
+        this.audio.play();
+      }
+    },
+    handleNext() {
 
-		},
-		
-	}
+    },
+
+  },
 };
 </script>
 
@@ -253,7 +252,7 @@ export default {
 			background-size: 100% 100%;
 			z-index: 100;
 			transition: .3s linear;
-			
+
 			transform-origin: 0 0;
 	}
 	.m-song-circle{

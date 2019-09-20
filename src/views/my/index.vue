@@ -25,7 +25,7 @@
             <van-collapse-item title="我创建的歌单" name="1">
                 <div slot="value" @click.stop="handleAdd" class="m-add">+</div>
                 <template v-for="item in myPlayList">
-                    <van-swipe-cell 
+                    <van-swipe-cell
                         :key="item.key"
                         v-if="!item.subscribed">
                         <van-cell
@@ -45,9 +45,9 @@
                 </template>
             </van-collapse-item>
              <van-collapse-item title="我收藏的歌单" name="2">
-                
+
                 <template v-for="item in myPlayList">
-                    <van-swipe-cell 
+                    <van-swipe-cell
                         :key="item.key"
                         v-if="item.subscribed">
                         <van-cell
@@ -67,7 +67,7 @@
                 </template>
             </van-collapse-item>
         </van-collapse>
-        
+
     </div>
     <van-popup
         v-model="isAddShow"
@@ -91,74 +91,77 @@
 </template>
 
 <script>
-import { SwipeCell ,NavBar,Cell, CellGroup,Button, Collapse, CollapseItem,Popup,Field,Checkbox  } from "vant";
-import { getUserPlaylist,setUserPlaylist } from '@/api/playlist'
+import {
+  SwipeCell, NavBar, Cell, CellGroup, Button, Collapse, CollapseItem, Popup, Field, Checkbox,
+} from 'vant';
+import { getUserPlaylist, setUserPlaylist } from '@/api/playlist';
+
 export default {
-    
-    components: {
-        [NavBar.name]: NavBar,
-        [Cell.name]: Cell,
-        [CellGroup.name]: CellGroup,
-        [SwipeCell.name]: SwipeCell,
-        [Button.name]: Button,
-        [Collapse.name]: Collapse,
-        [CollapseItem.name]: CollapseItem,
-        [Popup.name]: Popup,
-        [Field.name]: Field,
-        [Checkbox.name]: Checkbox
-    },
-    data(){
-        return {
-            isAddShow: false,//弹出新增歌单窗口
-            privacy: false,//设置隐私歌单
-            playlistName: '',
-            activeName: ['1'],
-            list: [
-                {
-                    title: '本地音乐',
-                    icon: '&#xe605'
-                },
-                {
-                    title: '最近播放',
-                    icon: '&#xe61c'
-                },
-                {
-                    title: '我的电台',
-                    icon: '&#xe606'
-                },
-                {
-                    title: '我的收藏',
-                    icon: '&#xe604'
-                }
-            ],
-            myPlayList: []
-        }
-    },
-    created(){
-        this.getUserPlaylist();
-    },
-    methods: {
-        handleAdd(){
-            this.isAddShow = true;
+
+  components: {
+    [NavBar.name]: NavBar,
+    [Cell.name]: Cell,
+    [CellGroup.name]: CellGroup,
+    [SwipeCell.name]: SwipeCell,
+    [Button.name]: Button,
+    [Collapse.name]: Collapse,
+    [CollapseItem.name]: CollapseItem,
+    [Popup.name]: Popup,
+    [Field.name]: Field,
+    [Checkbox.name]: Checkbox,
+  },
+  data() {
+    return {
+      isAddShow: false, // 弹出新增歌单窗口
+      privacy: false, // 设置隐私歌单
+      playlistName: '',
+      activeName: ['1'],
+      list: [
+        {
+          title: '本地音乐',
+          icon: '&#xe605',
         },
-        getUserPlaylist() {
-            getUserPlaylist(this.$store.state.user.id).then(({data}) => {
-                this.myPlayList = data.playlist
-            })
+        {
+          title: '最近播放',
+          icon: '&#xe61c',
         },
-        handleAddComplete(){
-            setUserPlaylist({
-                name: this.playlistName,
-                privacy: this.privacy ? "10" : null
-            }).then(({data}) => {
-                if(data.code === 200){
-                    this.$toast.success('新建歌单成功');
-                    this.isAddShow = false;
-                    this.getUserPlaylist();
-                }
-            })
+        {
+          title: '我的电台',
+          icon: '&#xe606',
+        },
+        {
+          title: '我的收藏',
+          icon: '&#xe604',
+        },
+      ],
+      myPlayList: [],
+    };
+  },
+  created() {
+    this.getUserPlaylist();
+  },
+  methods: {
+    handleAdd() {
+      this.isAddShow = true;
+    },
+    getUserPlaylist() {
+      getUserPlaylist(this.$store.state.user.id).then(({ data }) => {
+        this.myPlayList = data.playlist;
+      });
+    },
+    handleAddComplete() {
+      setUserPlaylist({
+        name: this.playlistName,
+        privacy: this.privacy ? '10' : null,
+      }).then(({ data }) => {
+        if (data.code === 200) {
+          this.$toast.success('新建歌单成功');
+          this.isAddShow = false;
+          this.getUserPlaylist();
         }
-    }
+      });
+    },
+  },
 };
 </script>
 
@@ -179,7 +182,7 @@ export default {
         font-size: 25px;
         color: #333;
     }
-   
+
     .m-playlist{
         .van-cell{
             padding: 5px 16px;

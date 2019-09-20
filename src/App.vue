@@ -12,7 +12,7 @@
     >
     </van-popup>
   </vue-route-transition>
-  
+
   <!-- <vue-route-transition id="app" :keepAlive="$route.meta.keepAlive">
 
   </vue-route-transition> -->
@@ -20,7 +20,8 @@
 
 <script>
 import { Popup } from 'vant';
-import Playing from '@/views/playing/'
+import Playing from '@/views/playing/';
+
 export default {
   name: 'app',
   data() {
@@ -29,7 +30,7 @@ export default {
   },
   components: {
     [Popup.name]: Popup,
-    Playing
+    Playing,
   },
 };
 </script>

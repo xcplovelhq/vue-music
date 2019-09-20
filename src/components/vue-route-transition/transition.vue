@@ -10,99 +10,97 @@
   </div>
 </template>
 <script>
-var localSessionRouteChain = sessionStorage.getItem('$$routeChain') || []
+let localSessionRouteChain = sessionStorage.getItem('$$routeChain') || [];
 
 export default {
   name: 'vue-route-transition',
   props: {
     keepAlive: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
-  data: function () {
+  data() {
     try {
-      localSessionRouteChain = this.$route.path !== '/' ? JSON.parse(localSessionRouteChain) : []
+      localSessionRouteChain = this.$route.path !== '/' ? JSON.parse(localSessionRouteChain) : [];
     } catch (error) {
-      localSessionRouteChain = []
+      localSessionRouteChain = [];
     }
     return {
       state: {
         addCount: localSessionRouteChain.length,
         routerMap: {},
         pageDirection: 'fade',
-        routeChain: localSessionRouteChain
-      }
-    }
+        routeChain: localSessionRouteChain,
+      },
+    };
   },
   methods: {
-    addRouteChain (route) {
+    addRouteChain(route) {
       if (this.state.addCount === 0 && localSessionRouteChain.length > 0) {
         // 排除刷新的时候
-        this.state.addCount = 1
-      } else {
-        if ((this.state.addCount !== 0 && this.state.routeChain[this.state.routeChain.length - 1].path !== route.path) || this.state.addCount === 0) {
-          this.state.routeChain.push({
-            path: route.path
-          })
-          sessionStorage.setItem('$$routeChain', JSON.stringify(this.state.routeChain))
-          this.state.addCount++
-        }
+        this.state.addCount = 1;
+      } else if ((this.state.addCount !== 0 && this.state.routeChain[this.state.routeChain.length - 1].path !== route.path) || this.state.addCount === 0) {
+        this.state.routeChain.push({
+          path: route.path,
+        });
+        sessionStorage.setItem('$$routeChain', JSON.stringify(this.state.routeChain));
+        this.state.addCount++;
       }
     },
-    popRouteChain () {
-      this.state.routeChain.pop()
-      sessionStorage.setItem('$$routeChain', JSON.stringify(this.state.routeChain))
+    popRouteChain() {
+      this.state.routeChain.pop();
+      sessionStorage.setItem('$$routeChain', JSON.stringify(this.state.routeChain));
     },
-    setPageDirection ({dir, to, from}) {
-      this.state.pageDirection = dir
-      this.state.routerMap['to'] = to.path
-      this.state.routerMap['from'] = from.path
+    setPageDirection({ dir, to, from }) {
+      this.state.pageDirection = dir;
+      this.state.routerMap.to = to.path;
+      this.state.routerMap.from = from.path;
     },
-    setRouterMap () {
-      let dir = this.state.pageDirection
-      let to = this.state.routerMap.to.replace(/\//g, '_')
-      let from = this.state.routerMap.from.replace(/\//g, '_')
+    setRouterMap() {
+      const dir = this.state.pageDirection;
+      const to = this.state.routerMap.to.replace(/\//g, '_');
+      const from = this.state.routerMap.from.replace(/\//g, '_');
       try {
         if (dir === 'slide-left') {
           // 进入
-          this.state.routerMap[from] = document.getElementById(from).scrollTop
+          this.state.routerMap[from] = document.getElementById(from).scrollTop;
         } else if (dir === 'slide-right') {
           // 返回
           if (this.keepAlive === true && this.$route.meta.keepAlive !== false) {
-            document.getElementById(to).scrollTop = this.state.routerMap[to]
+            document.getElementById(to).scrollTop = this.state.routerMap[to];
           }
         } else {
         }
       } catch (error) {
       }
-    }
+    },
   },
-  mounted () {
+  mounted() {
     this.$router.beforeEach((to, from, next) => {
       // 定义一个可以记录路由路径变化的数据，这里用sessionStorage,或者在window.routeChain等变量
-      let routeLength = this.state.routeChain.length
+      const routeLength = this.state.routeChain.length;
       if (routeLength === 0 || this.state.addCount === 0) {
-        this.setPageDirection({dir: 'slide-left', to, from})
-        this.addRouteChain(from)
-        this.addRouteChain(to)
+        this.setPageDirection({ dir: 'slide-left', to, from });
+        this.addRouteChain(from);
+        this.addRouteChain(to);
       } else if (routeLength === 1) {
-        this.setPageDirection({dir: 'slide-left', to, from})
-        this.addRouteChain(to)
+        this.setPageDirection({ dir: 'slide-left', to, from });
+        this.addRouteChain(to);
       } else {
-        let lastBeforeRoute = this.state.routeChain[routeLength - 2]
+        const lastBeforeRoute = this.state.routeChain[routeLength - 2];
         if (lastBeforeRoute.path === to.path && to.meta.slideLeft !== true) {
-          this.popRouteChain()
-          this.setPageDirection({dir: 'slide-right', to, from})
+          this.popRouteChain();
+          this.setPageDirection({ dir: 'slide-right', to, from });
         } else {
-          this.addRouteChain(to)
-          this.setPageDirection({dir: 'slide-left', to, from})
+          this.addRouteChain(to);
+          this.setPageDirection({ dir: 'slide-left', to, from });
         }
       }
-      next()
-    })
-  }
-}
+      next();
+    });
+  },
+};
 </script>
 
 <style lang="less">

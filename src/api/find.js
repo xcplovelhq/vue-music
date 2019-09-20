@@ -35,4 +35,3 @@ export const getToplistDetail = async function () {
   });
   return res;
 };
-

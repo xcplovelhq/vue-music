@@ -22,25 +22,25 @@
 </template>
 
 <script>
-import {formatEnter} from '@/utils/utils'
+import { formatEnter } from '@/utils/utils';
+
 export default {
-	props: {
-		detailsInfo: Object
+  props: {
+    detailsInfo: Object,
   },
-  created(){
-    console.log(formatEnter );
-    
+  created() {
+    console.log(formatEnter);
   },
-  computed:{
-    formatText(){
-      return formatEnter(this.detailsInfo.description)
-    }
+  computed: {
+    formatText() {
+      return formatEnter(this.detailsInfo.description);
+    },
   },
-	methods:{
-		handleClose(){
-			this.$emit('handle-close')
-		}
-	}
+  methods: {
+    handleClose() {
+      this.$emit('handle-close');
+    },
+  },
 };
 </script>
 

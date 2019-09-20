@@ -7,11 +7,11 @@
 
 <script>
 export default {
-    props: {
-        ImgUrl: String,
-        Size: String || Number
-    }
-}
+  props: {
+    ImgUrl: String,
+    Size: String || Number,
+  },
+};
 </script>
 
 <style lang="less" scoped>

@@ -6,20 +6,19 @@
 
 <script>
 export default {
-    props: {
-        playCount: Number
+  props: {
+    playCount: Number,
+  },
+  methods: {
+    getPlayCount() {
+      if (this.playCount > 100000000) {
+        return `${(this.playCount / 100000000).toFixed(1)}亿`;
+      } if (this.playCount > 100000) {
+        return `${(this.playCount / 10000).toFixed(1)}万`;
+      }
     },
-    methods:{
-        getPlayCount() {
-            if (this.playCount > 100000000) {
-                return (this.playCount / 100000000).toFixed(1) + '亿';
-            } else if (this.playCount > 100000) {
-                return (this.playCount / 10000).toFixed(1) + '万';
-
-            }
-        }
-    }
-}
+  },
+};
 </script>
 
 <style lang="less" scoped>
@@ -36,4 +35,3 @@ export default {
     }
 }
 </style>
-

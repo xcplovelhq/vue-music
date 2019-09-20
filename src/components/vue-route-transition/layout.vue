@@ -11,14 +11,14 @@
 export default {
   name: 'router-layout',
   props: {
-    id: String
+    id: String,
   },
-  data () {
+  data() {
     return {
-      cId: this.id || this.$route.path.replace(/\//g, '_') || '_null_'
-    }
-  }
-}
+      cId: this.id || this.$route.path.replace(/\//g, '_') || '_null_',
+    };
+  },
+};
 </script>
 
 <style lang="less">

@@ -20,17 +20,35 @@
             </van-swipe-item>
           </van-swipe>
         </div>
-        <div class="m-nav">
-          <van-grid :column-num="5" :border="false" :square="true">
-            <van-grid-item
-              v-for="item in navList"
-              :key="item.key"
-              icon="play-circle-o"
-              :text="item.title"
-              to="/ranking"
-            />
-          </van-grid>
-        </div>
+      </div>
+      <div class="m-nav">
+        <ul>
+          <li>
+            <router-link to="/" class="m-nav-item"><i class="iconfont">&#xe6b0;<span class="m-day">{{new Date().getDate()}}</span></i></router-link>
+            <p>每日推荐</p>
+          </li>
+          <li>
+            <router-link to="/" class="m-nav-item"><i class="iconfont i-playlist">&#xe61d;</i></router-link>
+            <p>歌单</p>
+          </li>
+            <li>
+            <router-link to="/" class="m-nav-item"><i class="iconfont">&#xe619;</i></router-link>
+            <p>歌手</p>
+          </li>
+          <li>
+            <router-link to="/ranking" class="m-nav-item"><i class="iconfont">&#xe603;</i></router-link>
+            <p>排行榜</p>
+          </li>
+        </ul>
+        <!-- <van-grid :column-num="3" :border="false" :square="false">
+          <van-grid-item
+            v-for="item in navList"
+            :key="item.key"
+            icon="play-circle-o"
+            :text="item.title"
+            to="/ranking"
+          />
+        </van-grid> -->
       </div>
       <van-cell title="推荐歌单" :border="false">
         <van-button round size="mini">歌单广场</van-button>
@@ -56,10 +74,13 @@
 </template>
 
 <script>
-import { NavBar, Swipe, SwipeItem, Grid, GridItem,Cell,Button } from 'vant';
-import { getBanner,getPersonalized } from '@/api/find';
-import PlayGif from '@/components/PlayGif'
-import PlayCount  from '@/components/PlayCount'
+import {
+  NavBar, Swipe, SwipeItem, Grid, GridItem, Cell, Button,
+} from 'vant';
+import { getBanner, getPersonalized } from '@/api/find';
+import PlayGif from '@/components/PlayGif';
+import PlayCount from '@/components/PlayCount';
+
 export default {
   components: {
     [NavBar.name]: NavBar,
@@ -70,29 +91,12 @@ export default {
     [Cell.name]: Cell,
     [Button.name]: Button,
     PlayCount,
-    PlayGif
+    PlayGif,
   },
   data() {
     return {
       bannerList: [],
       songList: [],
-      navList: [
-        {
-          title: '每日推荐',
-        },
-        {
-          title: '歌单',
-        },
-        {
-          title: '排行榜',
-        },
-        {
-          title: '电台',
-        },
-        {
-          title: '直播',
-        }
-      ]
     };
   },
   created() {
@@ -106,20 +110,20 @@ export default {
         this.bannerList = data.banners;
       });
     },
-    getPersonalizedData(){
-      getPersonalized().then(({data}) => {
-        this.songList = data.result
+    getPersonalizedData() {
+      getPersonalized().then(({ data }) => {
+        this.songList = data.result;
         console.log(data);
-      })
+      });
     },
-    handleGo(item){
-      this.$router.push({name: 'songSheet', query: {id: item.id}})
-    }
+    handleGo(item) {
+      this.$router.push({ name: 'songSheet', query: { id: item.id } });
+    },
   },
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 .find {
   .m-banner{
     padding: 10px 0;
@@ -147,6 +151,51 @@ export default {
   .van-button--mini{
     padding: 0 10px;
   }
+  .m-nav{
+    padding: 0 16px 10px;
+    border-bottom: 1px solid #ebedf0;
+    ul{
+      display: flex;
+      justify-content: space-between;
+      li{
+        text-align: center;
+        .m-nav-item{
+            display: block;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #f8443a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            .iconfont{
+                position: relative;
+                font-size: 22px;
+                color: #fff;
+                .m-day{
+                    position: absolute;
+                    left: 50%;
+                    top: 50%;
+                    margin: -3px 0 0 -7px;
+                    line-height: 1;
+                    font-size: 10px;
+                    color: #fff;
+                }
+                &:first-child{
+                  font-size: 24px;
+                }
+                &.i-playlist{
+                  font-size: 18px;
+                }
+            }
+        }
+        p{
+          margin-top: 5px;
+        }
+      }
+    }
+  }
   .m-list{
     display: flex;
     flex-wrap: wrap;
@@ -161,11 +210,11 @@ export default {
         overflow: hidden;
       }
       .m-text{
-        overflow:hidden; 
+        overflow:hidden;
         text-overflow:ellipsis;
-        display:-webkit-box; 
+        display:-webkit-box;
         -webkit-box-orient:vertical;
-        -webkit-line-clamp:2; 
+        -webkit-line-clamp:2;
         font-size: 12px;
         color: #333;
       }

@@ -9,12 +9,12 @@
 
 <script>
 export default {
-    methods: {
-        handleShowPlaying(){
-            this.$store.commit('playing/getShowPlaying')
-        }
-    }
-}
+  methods: {
+    handleShowPlaying() {
+      this.$store.commit('playing/getShowPlaying');
+    },
+  },
+};
 </script>
 
 <style lang="less" scoped>

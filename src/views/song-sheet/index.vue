@@ -7,7 +7,6 @@
       slot="header"
     />
     <div class="g-song-sheet">
-     
         <div class="g-song-name">
           <div
             class="m-name-bg"
@@ -33,24 +32,7 @@
             </div>
           </div>
         </div>
-        <div class="g-song-list" ref="container">
-          <van-sticky :container="container" :offset-top="46">
-            <div class="m-title"><i class="iconfont i-icon"></i>播放全部<span class="m-text">(共{{playlist.length}}首)</span></div>
-          </van-sticky>
-          <van-loading color="#d33a31" style="text-align: center;padding-top: 20px" v-if="playlist.length <= 0" />
-          <div class="m-list" v-else v-for="(item,idx) in playlist" :key="item.key">
-            <div class="just-between" @click="handleShow(item)">
-              <div class="m-num">{{ idx+1 }}</div>
-              <div class="m-right just-between">
-                <div class="m-text">
-                  <h3>{{item.name}}</h3>
-                  <p>{{item.ar[0].name}}-{{item.al.name}}</p>
-                </div>
-                <div class="m-handle"></div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <play-list :playlist="playlist"></play-list>
       <van-popup v-model="show" :style="{ width: '100%', height: '100%' }">
         <song-model :detailsInfo="detailsInfo" @handle-close="show = false"></song-model>
       </van-popup>
@@ -59,12 +41,14 @@
 </template>
 
 <script>
-import { getPlaylistDetail } from "@/api/playlist";
-import { NavBar,Popup,Sticky,Loading   } from "vant";
-import PlayCount  from '@/components/PlayCount'
-import Avata from '@/components/Avata'
-import SongModel from './components/song-model'
-import Scroll from '@/components/scroll'
+import {
+  NavBar, Popup, Sticky, Loading,
+} from 'vant';
+import { getPlaylistDetail } from '@/api/playlist';
+import PlayCount from '@/components/PlayCount';
+import Avata from '@/components/Avata';
+import SongModel from './components/song-model';
+import PlayList from '@/components/PlayList';
 export default {
   components: {
     [NavBar.name]: NavBar,
@@ -74,14 +58,14 @@ export default {
     PlayCount,
     Avata,
     SongModel,
-    Scroll
+    PlayList
   },
   data() {
     return {
       detailsInfo: {},
       playlist: [],
       show: false,
-      container: null
+      container: null,
     };
   },
   created() {
@@ -94,15 +78,15 @@ export default {
         this.playlist = data.playlist.tracks;
       });
     },
-    handleShow(row){
-      let data = Object.assign({},row.al,{singer: row.ar})
+    handleShow(row) {
+      const data = Object.assign({}, row.al, { singer: row.ar });
       data.id = row.id;
       data.name = row.name;
-      this.$store.commit('playing/setSongInfo', data)
-      this.$store.commit('playing/getShowPlaying')
-      this.$store.dispatch('playing/getSongUrlData')
-    }
-  }
+      this.$store.commit('playing/setSongInfo', data);
+      this.$store.commit('playing/getShowPlaying');
+      this.$store.dispatch('playing/getSongUrlData');
+    },
+  },
 };
 </script>
 <style lang="less" scoped>
@@ -156,7 +140,6 @@ export default {
             flex:1;
             h3{
                 margin: 0;
-                f
                 padding-top: 1px;
                 font-size: 17px;
                 line-height: 1.3;
@@ -180,11 +163,11 @@ export default {
         }
         .m-tips{
           margin-top: 20px;
-          overflow:hidden; 
+          overflow:hidden;
           text-overflow:ellipsis;
-          display:-webkit-box; 
+          display:-webkit-box;
           -webkit-box-orient:vertical;
-          -webkit-line-clamp:2; 
+          -webkit-line-clamp:2;
           font-size: 12px;
           color: #fff;
           opacity: 0.8;
@@ -248,15 +231,15 @@ export default {
                     font-size: 12px;
                     color: #888;
                     line-height: 18px;
-                    overflow:hidden; 
+                    overflow:hidden;
                     text-overflow:ellipsis;
-                    display:-webkit-box; 
+                    display:-webkit-box;
                     -webkit-box-orient:vertical;
-                    -webkit-line-clamp:1; 
+                    -webkit-line-clamp:1;
                 }
             }
         }
     }
-}
+  }
 }
 </style>

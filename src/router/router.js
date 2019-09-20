@@ -8,7 +8,7 @@ const Ranking = resolve => require(['@/views/find/ranking'], resolve);
 const My = resolve => require(['@/views/my/index'], resolve);
 const Account = resolve => require(['@/views/account/index'], resolve);
 const SongSheet = resolve => require(['@/views/song-sheet/index'], resolve);
-const Playing = resolve => require(['@/views/playing/index'],resolve)
+const Playing = resolve => require(['@/views/playing/index'], resolve);
 Vue.use(Router);
 
 export default new Router({
