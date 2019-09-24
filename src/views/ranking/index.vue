@@ -1,10 +1,6 @@
 <template>
   <router-layout>
-    <van-nav-bar
-    title="标题"
-    left-text="返回"
-    right-text="按钮"
-  />
+  <m-header title="排行榜" slot="header"></m-header>
   <div class="g-ranking defaultSpacing">
    
     <div class="m-title">
@@ -57,6 +53,7 @@
 <script>
 import { Tabbar, TabbarItem, NavBar,Skeleton  } from 'vant';
 import { getToplistDetail } from '@/api/playlist';
+import MHeader from '@/components/Header'
 
 export default {
   components: {
@@ -64,6 +61,7 @@ export default {
     [TabbarItem.name]: TabbarItem,
     [NavBar.name]: NavBar,
     [Skeleton.name]: Skeleton,
+    MHeader
   },
   data(){
     return {

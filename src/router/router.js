@@ -4,9 +4,10 @@ import Router from 'vue-router';
 const Home = resolve => require(['@/views/home.vue'], resolve);
 // 发现
 const Find = resolve => require(['@/views/find/index'], resolve);
-const Ranking = resolve => require(['@/views/find/ranking'], resolve);
+const Ranking = resolve => require(['@/views/ranking/index'], resolve);
 const My = resolve => require(['@/views/my/index'], resolve);
-const Account = resolve => require(['@/views/account/index'], resolve);
+const Singer = resolve => require(['@/views/singer/index'], resolve);
+const SongDetails = resolve => require(['@/views/singer/details'], resolve);
 const SongSheet = resolve => require(['@/views/song-sheet/index'], resolve);
 const Playing = resolve => require(['@/views/playing/index'], resolve);
 Vue.use(Router);
@@ -39,23 +40,32 @@ export default new Router({
           },
         },
         {
-          path: '/account',
-          name: 'account',
-          component: Account,
+          path: '/singer',
+          name: 'singer',
+          component: Singer,
           meta: {
-            title: '发现',
+            title: '歌手',
+            keepAlive: true,
+          },
+        },
+        {
+          path: '/ranking',
+          name: 'ranking',
+          component: Ranking,
+          meta: {
+            title: '排行榜',
             keepAlive: true,
           },
         },
       ],
     },
     {
-      path: '/ranking',
-      name: 'ranking',
-      component: Ranking,
+      path: '/singer-details',
+      name: 'songDetails',
+      component: SongDetails,
       meta: {
-        title: '排行榜',
-        keepAlive: true,
+        title: '歌手详情',
+        keepAlive: false,
       },
     },
     {

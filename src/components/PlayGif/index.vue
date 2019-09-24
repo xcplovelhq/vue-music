@@ -22,7 +22,6 @@ export default {
     width: 20px;
     height: 20px;
     display: flex;
-    margin-bottom: 15px;
     justify-content: space-between;
     span {
         width: 2px;

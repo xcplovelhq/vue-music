@@ -1,9 +1,9 @@
 <template>
-  <div class="scroll">
+  <div class="scroll" :style="{overflow: `${isHidden ? 'hidden': 'visible'}`}">
     <div ref="bsWrapper" class="pulldown-bswrapper">
       <div class="pulldown-scroller">
         <div class="pulldown-wrapper">
-          <div v-show="beforePullDown && propsPullDown">
+          <div v-show="beforePullDown && pulldown">
             <span v-if="getScrollTop">下拉即可刷新</span>
             <span v-else>释放即可刷新</span>
           </div>
@@ -14,14 +14,13 @@
             <div v-show="!isPullingDown"><span>加载成功</span></div>
           </div>
         </div>
-
         <slot></slot>
-        <div class="pullup-wrapper" v-show="beforePullUp && propsPullUp">
-          <div v-if="!isPullUpLoad" class="before-trigger">
-            <span class="pullup-txt">正在加载</span>
+        <div class="pullup-wrapper">
+          <div v-if="!isPullUpLoad && pullup" class="before-trigger">
+            <span class="pullup-txt">上拉加載更多</span>
           </div>
           <div v-else class="after-trigger">
-            <span class="pullup-txt">Loading...</span>
+            <span class="pullup-txt">{{pullUpText}}</span>
           </div>
         </div>
       </div>
@@ -41,14 +40,22 @@ export default {
 
   props: {
     data: [Array],
-    propsPullDown: {
+    isScrollX: {
       type: Boolean,
       default: false,
     },
-    propsPullUp: {
+    pulldown: {
       type: Boolean,
       default: false,
     },
+    pullup: {
+      type: Boolean,
+      default: false,
+    },
+    isHidden: {
+      type: Boolean,
+      default: false,
+    }
   },
   data() {
     return {
@@ -56,6 +63,7 @@ export default {
       beforePullDown: true,
       isPullingDown: false,
       isPullUpLoad: true,
+      pullUpText: '加载中...',
       y: 0,
     };
   },
@@ -78,22 +86,33 @@ export default {
   methods: {
     initBscroll() {
       this.bscroll = new BScroll(this.$refs.bsWrapper, {
+        probeType: 3,
         scrollY: true,
-        bounceTime: 800,
-        pullDownRefresh: this.propsPullDown && {
+        scrollX: this.isScrollX,
+        bounce: {
+          top: true,
+          bottom: false,
+          left: true,
+          right: true
+        },
+        pullDownRefresh: this.pulldown && {
           threshold: 90,
           stop: 40,
         },
         click: true,
-        pullUpLoad: this.propsPullUp,
+        pullUpLoad: this.pullup,
       });
-      this.propsPullDown && this.bscroll.on('pullingDown', this.pullingDownHandler);
-      this.propsPullUp && this.bscroll.on('pullingUp', this.pullingUpHandler);
+      
+      this.isPullUpText();
+      this.pulldown && this.bscroll.on('pullingDown', this.pullingDownHandler);
+      this.pullup && this.bscroll.on('pullingUp', this.pullingUpHandler);
       this.bscroll.on('scroll', this.scrollHandler);
+      console.log(this.bscroll);
     },
     // 滚动时触发
     scrollHandler(pos) {
       this.y = pos.y;
+      this.$emit('scroll-handler',pos);
     },
     // 下拉时触发事件
     pullingDownHandler() {
@@ -111,43 +130,35 @@ export default {
       this.$emit('pull-up');
       // this.bscroll.finishPullUp()
     },
-
-    // async finishPullDown() {
-    //   const stopTime = 600
-    //   await new Promise(resolve => {
-    //     setTimeout(() => {
-    //       this.bscroll.finishPullDown() // 设置回弹
-    //       resolve()
-    //     }, 2000)
-    //   })
-    //   setTimeout(() => {
-    //     this.beforePullDown = true
-    //     this.bscroll.refresh()
-    //   }, 1000)
-    // },
-    // async requestData() {
-    //   try {
-    //     if(this.isPullUpLoad){
-    //       this.dataList.push(Math.random())
-    //     }else {
-    //       this.dataList =  [1,2,3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1];
-    //     }
-    //   } catch (err) {
-    //     // handle err
-    //     // console.log(err)
-    //   }
-    // },
+    isPullUpText(){
+      // this.isShowPullUpText = this.scroll.hasVerticalScroll
+        if(!this.pullup){
+          console.log('321321');
+          
+        this.pullUpText = '没有更多的数据了';
+      }
+    }
   },
   watch: {
-    data() {
-      this.isPullUpLoad = false;
-      this.isPullingDown = false;
-      this.beforePullDown = true;
-      setTimeout(() => {
-        this.bscroll.finishPullUp();
-        this.bscroll.finishPullDown();
-        this.bscroll.refresh();
-      }, 50);
+    data(val) {
+      if(val.length >= 100){
+        this.isPullUpText();
+      }
+      if(this.isPullUpLoad || this.pullup){
+        this.isPullUpLoad = false;
+        setTimeout(() => {
+          this.bscroll.finishPullUp();
+          this.bscroll.refresh();
+        }, 50)
+      }
+      if(this.isPullingDown){
+        this.isPullingDown = false
+        setTimeout(() => {
+            this.beforePullDown = true;
+            this.bscroll.finishPullDown();
+            this.bscroll.refresh();
+        }, 600)
+      }
     },
   },
 };
@@ -157,12 +168,13 @@ export default {
 
 .scroll{
   flex: 1;
-   overflow:auto;
+  height: 100%;
+  //  overflow:auto;
 }
 .pulldown-bswrapper{
   position: relative;
   height: 100%;
-  overflow: hidden;
+  overflow: visible;
 }
 .pulldown-list{
   padding: 0;

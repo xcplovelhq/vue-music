@@ -1,14 +1,7 @@
 <template>
   <router-layout>
     <div class="find">
-      <van-nav-bar
-          title="标题"
-          left-text="返回"
-          right-text="按钮"
-          slot="header"
-        >
-        <play-gif slot="right"></play-gif>
-        </van-nav-bar>
+      <m-header title="推荐" slot="header"></m-header>
       <div class="defaultSpacing">
         <div class="m-banner">
           <van-swipe :autoplay="3000" indicator-color="white">
@@ -21,35 +14,6 @@
           </van-swipe>
         </div>
       </div>
-      <div class="m-nav">
-        <ul>
-          <li>
-            <router-link to="/" class="m-nav-item"><i class="iconfont">&#xe6b0;<span class="m-day">{{new Date().getDate()}}</span></i></router-link>
-            <p>每日推荐</p>
-          </li>
-          <li>
-            <router-link to="/" class="m-nav-item"><i class="iconfont i-playlist">&#xe61d;</i></router-link>
-            <p>歌单</p>
-          </li>
-            <li>
-            <router-link to="/" class="m-nav-item"><i class="iconfont">&#xe619;</i></router-link>
-            <p>歌手</p>
-          </li>
-          <li>
-            <router-link to="/ranking" class="m-nav-item"><i class="iconfont">&#xe603;</i></router-link>
-            <p>排行榜</p>
-          </li>
-        </ul>
-        <!-- <van-grid :column-num="3" :border="false" :square="false">
-          <van-grid-item
-            v-for="item in navList"
-            :key="item.key"
-            icon="play-circle-o"
-            :text="item.title"
-            to="/ranking"
-          />
-        </van-grid> -->
-      </div>
       <van-cell title="推荐歌单" :border="false">
         <van-button round size="mini">歌单广场</van-button>
       </van-cell>
@@ -57,7 +21,6 @@
         <template v-for="(item,idx) in songList">
           <div class="m-list-item"
             :key="item.key"
-            v-if="idx < 6"
             @click="handleGo(item)">
               <div class="m-img">
                 <img :src="item.picUrl" />
@@ -78,8 +41,8 @@ import {
   NavBar, Swipe, SwipeItem, Grid, GridItem, Cell, Button,
 } from 'vant';
 import { getBanner, getPersonalized } from '@/api/find';
-import PlayGif from '@/components/PlayGif';
 import PlayCount from '@/components/PlayCount';
+import MHeader from '@/components/Header'
 
 export default {
   components: {
@@ -91,7 +54,7 @@ export default {
     [Cell.name]: Cell,
     [Button.name]: Button,
     PlayCount,
-    PlayGif,
+    MHeader
   },
   data() {
     return {
@@ -125,6 +88,7 @@ export default {
 
 <style lang="less">
 .find {
+  padding-top: 46px;
   .m-banner{
     padding: 10px 0;
     overflow: hidden;

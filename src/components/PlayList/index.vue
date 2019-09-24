@@ -1,9 +1,9 @@
 <template>
   <div class="g-song-list" ref="container">
-    <van-sticky :container="container" :offset-top="46">
-    	<div class="m-title"><i class="iconfont i-icon"></i>播放全部<span class="m-text">(共{{playlist.length}}首)</span></div>
-    </van-sticky>
-    <van-loading color="#d33a31" style="text-align: center;padding-top: 20px" v-if="playlist.length <= 0" />
+    <!-- <van-sticky :container="container" :offset-top="46"> -->
+    	<div class="m-title"><i class="iconfont i-icon"></i>播放全部<span class="m-text">(共{{playlist && playlist.length}}首)</span></div>
+    <!-- </van-sticky> -->
+    <van-loading color="#d33a31" style="text-align: center;padding-top: 20px" v-if="playlist && playlist.length <= 0" />
     <div class="m-list" v-else v-for="(item,idx) in playlist" :key="item.key">
     <div class="just-between" @click="handleShow(item)">
         <div class="m-num">{{ idx+1 }}</div>
@@ -52,7 +52,7 @@ export default {
 <style lang="less" scoped>
 .g-song-list{
     position: relative;
-    margin-top: -20px;
+    // margin-top: -20px;
     .m-title{
         display: flex;
         height: 50px;
