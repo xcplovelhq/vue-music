@@ -2,7 +2,6 @@
   <router-layout>
   <m-header title="排行榜" slot="header"></m-header>
   <div class="g-ranking defaultSpacing">
-   
     <div class="m-title">
       官方榜
     </div>

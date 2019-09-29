@@ -22,10 +22,10 @@
     </div>
     <div class="m-playing-black-bg">
     </div>
-    <div
+    <!-- <div
       class="m-needle"
       :style="{ transform: `rotate(${playing ? 0 : -20}deg)` }">
-    </div>
+    </div> -->
     <div class="m-song">
       <div class="m-song-circle">
         <div
@@ -85,11 +85,37 @@
         </div>
       </div>
     </div>
+    <van-popup
+      v-model="isShowList"
+      round
+      position="bottom"
+      :style="{ height: '50%' }"
+    >
+      <div class="m-play-list">
+        <scroll 
+          :data="getSongList"
+        >
+          <ul>
+            <li v-for="item in getSongList" :key="item.key">
+              <div class="m-name">
+                {{item.name}}-{{item.ar[0].name}}
+              </div>
+              <div class="m-close">
+                <van-icon name="cross" />
+              </div>
+            </li>
+          </ul>
+        </scroll>
+        
+      </div>
+      <van-button style="position: absolute; bottom: 0" size="large">关闭</van-button>
+    </van-popup>
   </div>
 </template>
 
 <script>
-import { NavBar, Icon } from 'vant';
+import { NavBar, Icon,Popup,Button   } from 'vant';
+import Scroll from '@/components/scroll'
 
 export default {
   data() {
@@ -101,12 +127,17 @@ export default {
       audio: null,
       input: null,
       currentTime: 0,
+      isShowList: true,
     };
   },
 
   components: {
     [NavBar.name]: NavBar,
     [Icon.name]: Icon,
+    [Popup.name]: Popup,
+    [Button.name]: Button,
+    [Button.name]: Button,
+    Scroll
   },
   computed: {
     getMusicUrl() {
@@ -115,6 +146,9 @@ export default {
     info() {
       return this.$store.state.playing.info;
     },
+    getSongList(){
+      return this.$store.state.playing.songList;
+    }
   },
   mounted() {
     this.$nextTick(() => {
@@ -318,7 +352,22 @@ export default {
 							color: #fff;
 					}
 			}
-	}
+  }
+  .m-play-list{
+    display: flex;
+    height: 84%;
+    li{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 40px;
+      border: 1px solid #f7f7f7;
+      padding: 0 16px 0 0;
+      margin-left: 16px;
+      font-size: 14px;
+      color: #333;
+    }
+  }
 }
 @keyframes circleRotate{
 	0%{

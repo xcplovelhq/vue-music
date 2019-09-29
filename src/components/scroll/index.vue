@@ -15,7 +15,7 @@
           </div>
         </div>
         <slot></slot>
-        <div class="pullup-wrapper">
+        <div class="pullup-wrapper" v-if="pullup">
           <div v-if="!isPullUpLoad && pullup" class="before-trigger">
             <span class="pullup-txt">上拉加載更多</span>
           </div>
@@ -55,7 +55,7 @@ export default {
     isHidden: {
       type: Boolean,
       default: false,
-    }
+    },
   },
   data() {
     return {
@@ -107,7 +107,7 @@ export default {
       this.pulldown && this.bscroll.on('pullingDown', this.pullingDownHandler);
       this.pullup && this.bscroll.on('pullingUp', this.pullingUpHandler);
       this.bscroll.on('scroll', this.scrollHandler);
-      console.log(this.bscroll);
+      
     },
     // 滚动时触发
     scrollHandler(pos) {
@@ -133,8 +133,6 @@ export default {
     isPullUpText(){
       // this.isShowPullUpText = this.scroll.hasVerticalScroll
         if(!this.pullup){
-          console.log('321321');
-          
         this.pullUpText = '没有更多的数据了';
       }
     }
@@ -144,7 +142,7 @@ export default {
       if(val.length >= 100){
         this.isPullUpText();
       }
-      if(this.isPullUpLoad || this.pullup){
+      if(this.isPullUpLoad && this.pullup){
         this.isPullUpLoad = false;
         setTimeout(() => {
           this.bscroll.finishPullUp();
@@ -159,6 +157,7 @@ export default {
             this.bscroll.refresh();
         }, 600)
       }
+      console.log( this.bscroll);
     },
   },
 };

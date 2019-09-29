@@ -5,16 +5,16 @@
     <!-- </van-sticky> -->
     <van-loading color="#d33a31" style="text-align: center;padding-top: 20px" v-if="playlist && playlist.length <= 0" />
     <div class="m-list" v-else v-for="(item,idx) in playlist" :key="item.key">
-    <div class="just-between" @click="handleShow(item)">
-        <div class="m-num">{{ idx+1 }}</div>
-        <div class="m-right just-between">
-        <div class="m-text">
-            <h3>{{item.name}}</h3>
-            <p>{{item.ar[0].name}}-{{item.al.name}}</p>
-        </div>
-        <div class="m-handle"></div>
-        </div>
-    </div>
+      <div class="just-between" @click="handleShow(item, playlist)">
+          <div class="m-num">{{ idx+1 }}</div>
+          <div class="m-right just-between">
+          <div class="m-text">
+              <h3>{{item.name}}</h3>
+              <p>{{item.ar[0].name}}-{{item.al.name}}</p>
+          </div>
+          <div class="m-handle"></div>
+          </div>
+      </div>
     </div>
 </div>
 </template>
@@ -37,12 +37,13 @@ export default {
 		}
 	},
 	methods: {
-		 handleShow(row) {
+		 handleShow(row, list) {
       const data = Object.assign({}, row.al, { singer: row.ar });
       data.id = row.id;
       data.name = row.name;
       this.$store.commit('playing/setSongInfo', data);
       this.$store.commit('playing/getShowPlaying');
+      this.$store.commit('playing/setSongList', list);
       this.$store.dispatch('playing/getSongUrlData');
     },
 	}

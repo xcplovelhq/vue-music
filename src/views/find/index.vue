@@ -88,7 +88,6 @@ export default {
 
 <style lang="less">
 .find {
-  padding-top: 46px;
   .m-banner{
     padding: 10px 0;
     overflow: hidden;

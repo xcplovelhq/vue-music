@@ -157,7 +157,6 @@ export default {
   display: flex;
   flex-direction: column;
   height: 100%;
-  padding-top: 46px;
   background: #fff;
   .m-screen{
     padding: 10px 10px 0;

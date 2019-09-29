@@ -1,5 +1,5 @@
 <template>
-  <router-layout id="__index">
+  <router-layout id="__index" class="body">
     <router-view></router-view>
     <van-tabbar slot="footer" :fixed="false" v-model="active">
       <van-tabbar-item to="/find" icon="shop">发现</van-tabbar-item>

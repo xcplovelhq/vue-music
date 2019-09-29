@@ -30,6 +30,7 @@ const actions = {
       commit('setMusicUrl', data.data[0].url);
     });
   },
+  
 };
 export default {
   namespaced: true,

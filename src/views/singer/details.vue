@@ -3,7 +3,7 @@
     <m-header :leftText="info.name" :isOpcity="true"></m-header>
     <div class="m-header" :class="{active: isHidden}" :style="{transform: `scale(${y})`, background: `url(${info.img1v1Url}) 0 0/cover`, }"></div>
     <div class="m-scroll">
-       <scroll 
+      <scroll 
         :data="playlist"
         @scroll-handler="getScroll"
         v-if="playlist.length > 0"

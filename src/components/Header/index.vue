@@ -9,7 +9,7 @@
         </div>
         <div class="m-right">
             <div >
-                <play-gif></play-gif>
+                <play-gif :class="{active: !isOpcity}"></play-gif>
             </div>
         </div>
     </div>
@@ -57,6 +57,7 @@ export default {
     width: 100%;
     height: 46px;
     z-index: 1000;
+    transition: all .3s linear;
     .just-between{
         height: 100%;
     }
@@ -75,10 +76,24 @@ export default {
     .m-title{
         flex: 1;
         font-size: 16px;
+        color: #fff;
         text-align: center;
     }
     &.active{
         background: #fff;
+        .m-left{
+            .iconfont{
+                color: #333;
+            }
+        }
+        .m-title{
+            color: #333;
+        }
+        .m-right{
+            span{
+                color: #333;    
+            }
+        }
     }
 }
 </style>
