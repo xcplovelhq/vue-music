@@ -9,7 +9,6 @@
       :overlay="false"
       :style="{ width: '100%', height: '100%' }">
       <playing></playing>
-    >
     </van-popup>
   </vue-route-transition>
 

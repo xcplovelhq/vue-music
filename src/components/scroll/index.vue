@@ -107,7 +107,6 @@ export default {
       this.pulldown && this.bscroll.on('pullingDown', this.pullingDownHandler);
       this.pullup && this.bscroll.on('pullingUp', this.pullingUpHandler);
       this.bscroll.on('scroll', this.scrollHandler);
-      
     },
     // 滚动时触发
     scrollHandler(pos) {
@@ -157,7 +156,7 @@ export default {
             this.bscroll.refresh();
         }, 600)
       }
-      console.log( this.bscroll);
+      
     },
   },
 };

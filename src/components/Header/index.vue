@@ -1,7 +1,7 @@
 <template>
   <div class="g-header" :class="{active: !isOpcity}">
     <div class="just-between" >
-        <div class="m-left" @click="handleBack">
+        <div class="m-left" :class="{'hide': !isShowBack}" @click="handleBack">
             <i class="iconfont">&#xe72a;</i>{{leftText}}
         </div>
         <div class="m-title">
@@ -41,6 +41,11 @@ export default {
             default: false
         },
     },
+    computed:{
+        isShowBack(){
+            return !this.$route.meta.isHideBack;
+        }
+    },
     methods:{
         handleBack(){
             this.$router.go(-1)
@@ -58,6 +63,7 @@ export default {
     height: 46px;
     z-index: 1000;
     transition: all .3s linear;
+    
     .just-between{
         height: 100%;
     }
@@ -78,6 +84,9 @@ export default {
         font-size: 16px;
         color: #fff;
         text-align: center;
+    }
+    .hide{
+        visibility: hidden;
     }
     &.active{
         background: #fff;

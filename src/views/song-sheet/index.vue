@@ -82,7 +82,6 @@ export default {
   },
   methods: {
     getScroll(row){
-      console.log(row.y);
       if(row.y > 10){
         this.isHidden = true
       }else if(row.y >= -10){

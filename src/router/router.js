@@ -26,6 +26,7 @@ export default new Router({
           component: Find,
           meta: {
             title: '发现',
+            isHideBack: true,
             keepAlive: true,
           },
         },
@@ -36,6 +37,7 @@ export default new Router({
           component: My,
           meta: {
             title: '我的',
+            isHideBack: true,
             keepAlive: true,
           },
         },
@@ -45,6 +47,7 @@ export default new Router({
           component: Singer,
           meta: {
             title: '歌手',
+            isHideBack: true,
             keepAlive: true,
           },
         },
@@ -54,6 +57,7 @@ export default new Router({
           component: Ranking,
           meta: {
             title: '排行榜',
+            isHideBack: true,
             keepAlive: true,
           },
         },

@@ -1,7 +1,7 @@
 import { getSongUrl } from '@/api/song.js';
 
 const state = {
-  isShowPlaying: false,
+  isShowPlaying: false, // 是否弹出播放界面
   musicUrl: '',
   info: {},
   songList: [],
