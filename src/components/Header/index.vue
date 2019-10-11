@@ -7,8 +7,8 @@
         <div class="m-title">
             {{title}}
         </div>
-        <div class="m-right">
-            <div >
+        <div class="m-right" :class="{'hide': isShowplay}">
+            <div>
                 <play-gif :class="{active: !isOpcity}"></play-gif>
             </div>
         </div>
@@ -44,6 +44,9 @@ export default {
     computed:{
         isShowBack(){
             return !this.$route.meta.isHideBack;
+        },
+        isShowplay(){
+            return !(this.$store.state.playing.songList.length > 0)
         }
     },
     methods:{

@@ -15,11 +15,13 @@
       >
         <h3>{{info.name}}</h3>
         <div class="m-singer">
-          <router-link
-            to="/"
+          <a
+            @click="goSinger(item)"
             v-for="(item,idx) in info.singer"
             :key="item.key"
-          >{{item.name}}{{(idx < info.singer.length - 1)  ? '/' : ''}}</router-link>
+          >
+          {{item.name}}{{(idx < info.singer.length - 1)  ? '/' : ''}}
+          </a>
           <van-icon name="arrow" />
         </div>
       </div>
@@ -79,6 +81,7 @@
         <audio
           ref="audio"
           :src="getMusicUrl"
+          :autoplay="playing"
           preload="auto"
           @canplay="getDuration"
           @timeupdate="getTimeupdate"
@@ -173,14 +176,14 @@ export default {
   data() {
     return {
       seeking: false,
-      playing: false,
       played: 0,
       duration: 0,
       audio: null,
       input: null,
       currentTime: 0,
       isShowList: false,
-      modelNum: 0,
+      modelNum: 2,
+      randomList: [],
       modelIcon: [
         {
           icon: '&#xe66c;',
@@ -214,6 +217,14 @@ export default {
     },
     getSongList() {
       return this.$store.state.playing.songList;
+    },
+    playing(){
+      if (this.$store.state.playing.isPlay) {
+        this.audio && this.audio.play();
+      } else {
+        this.audio && this.audio.pause();
+      }
+      return this.$store.state.playing.isPlay
     }
   },
   mounted() {
@@ -226,6 +237,11 @@ export default {
     });
   },
   methods: {
+    goSinger(item){
+      this.$store.commit('playing/getHidePlaying')
+      this.$router.push({name: 'singerDetails', query:{id: item.id}})
+      
+    },
     handleMousedown(e) {
       this.seeking = true;
     },
@@ -300,37 +316,72 @@ export default {
       this.isShowList = false;
       this.$store.commit('playing/setSongInfo', data);
       this.$store.dispatch('playing/getSongUrlData');
-      this.playing = false;
-      this.handlePlay();
+      this.$store.commit('playing/setIsPlay', true)
     },
     handleChangePlay(type) {
       let index = 0;
+      let randomNum = Math.floor(Math.random() * this.getSongList.length);
+      console.log(randomNum,'aaaaaaaaaaa');
+      
       this.getSongList.forEach((item,idx) => {
         if(item.id === this.info.id){
-          if(type === 'next'){
-            if(idx === this.getSongList.length -1){
-              index = 0
-            }else {
-              index = idx + 1
-            }
-          }else{
-            if(idx === 0){
-              index = this.getSongList.length - 1
-            }else {
-              index = idx - 1
-            }
+          switch (type) {
+            case 'next':
+              if(this.modelNum != 2){
+                if(idx === this.getSongList.length -1){
+                  index = 0
+                }else {
+                  index = idx + 1
+                }
+              }else {
+                index = randomNum;
+                if(this.randomList.length > 0){
+                  if(this.randomList.indexOf(randomNum) < 0){
+                    this.randomList.push(randomNum)
+                  }else{
+                    // if(this.randomList[this.randomList.indexOf(randomNum) + 1]){
+                    //   index = this.randomList[this.randomList.indexOf(idx) + 1]
+                    // }
+                  }
+                }else{
+                  this.randomList.push(idx)
+                }
+              }
+              break;
+            case 'current':
+              if(this.modelNum != 2){
+                if(idx === 0){
+                  index = this.getSongList.length - 1
+                }else {
+                  index = idx - 1
+                }
+              }else {
+                index = randomNum;
+                if(this.randomList.length > 0){
+                  if(this.randomList.indexOf(randomNum) < 0){
+                    this.randomList.unshift(randomNum)
+                  }else {
+                    if(this.randomList[this.randomList.indexOf(randomNum) - 1]){
+                      index = this.randomList[this.randomList.indexOf(idx) - 1]
+                    }
+                  }
+                }else{
+                  this.randomList.push(idx)
+                }
+              }
+              break;
           }
         }
       })
+      // console.log(index);
+      console.log(this.randomList);
       this.handleSong(this.getSongList[index])
     },
     handlePlay() {
       if (this.playing) {
-        this.playing = false;
-        this.audio.pause();
+        this.$store.commit('playing/setIsPlay', false)
       } else {
-        this.playing = true;
-        this.audio.play();
+        this.$store.commit('playing/setIsPlay', true)
       }
     },
   }

@@ -3,15 +3,17 @@
     class="g-play-gif"
     @click="handleShowPlaying"
   >
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
+    <span v-for="item in 4" :key="item.key" :class="getRun"></span>
   </div>
 </template>
 
 <script>
 export default {
+  computed:{
+    getRun(){
+      return this.$store.state.playing.isPlay ? 'run' : 'paused';
+    }
+  },
   methods: {
     handleShowPlaying() {
       this.$store.commit("playing/getShowPlaying");
@@ -31,7 +33,6 @@ export default {
     margin-right: 1px;
     background: #fff;
     animation: up-and-down 2s linear infinite calc(-1 * 0.4s * var(--n));
-    animation-play-state: paused;
     &:nth-child(1) {
       --n: 1;
     }
@@ -43,6 +44,12 @@ export default {
     }
     &:nth-child(4) {
       --n: 4;
+    }
+    &.run{
+      animation-play-state: running;
+    }
+    &.paused{
+      animation-play-state: paused;
     }
   }
   &.active {

@@ -2,6 +2,7 @@ import { getSongUrl } from '@/api/song.js';
 
 const state = {
   isShowPlaying: false, // 是否弹出播放界面
+  isPlay: false, // 是否正在播放界面
   musicUrl: '',
   info: {},
   songList: [],
@@ -23,6 +24,9 @@ const mutations = {
   setSongList: (state, data) => {
     state.songList = data;
   },
+  setIsPlay: (state, data) => {
+    state.isPlay = data
+  }
 };
 const actions = {
   getSongUrlData: ({ state, commit }, id) => {

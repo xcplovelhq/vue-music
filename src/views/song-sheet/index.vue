@@ -2,7 +2,6 @@
   <router-layout>
     <m-header :title="title" slot="header" :isOpcity="!isHidden"></m-header>
     <div class="g-song-sheet">
-     
         <scroll 
           :data="playlist"
           @scroll-handler="getScroll"
@@ -32,7 +31,7 @@
               </div>
             </div>
           </div>
-          <play-list :playlist="playlist"></play-list>
+            <play-list :playlist="playlist"></play-list>
         </scroll>
       <van-popup v-model="show" :style="{ width: '100%', height: '100%' }">
         <song-model :detailsInfo="detailsInfo" @handle-close="show = false"></song-model>
