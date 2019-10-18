@@ -38,8 +38,8 @@
       class="m-needle"
       :style="{ transform: `rotate(${playing ? 0 : -20}deg)` }">
     </div> -->
-    <div class="m-song">
-      <div class="m-song-circle">
+    <div class="m-song" >
+      <div class="m-song-circle" @click="handleChangeLyric" v-show="!isShowLyric">
         <div
           id="circle"
           :class="`m-black-circle z-rotate ${!playing && 'z-norotate'}`"
@@ -52,6 +52,13 @@
           </div>
         </div>
       </div>
+      <div class="m-song-lyric" @click="handleChangeLyric" v-show="isShowLyric">
+        <ul>
+          <li v-for="item in getMusicLyric" :key="item.key" v-if="!!item" class="active">{{item}}</li>
+        </ul>
+      </div>
+      {{getMusicLyricTime}}
+
     </div>
     <div class="m-audio audio-wrapper">
       <div class="m-audio-box">
@@ -141,7 +148,7 @@
           列表循环（{{getSongList.length}}）
         </div>
       </div>
-      <div class="m-play-list" ref="playList" @scroll="getPlayScroll">
+      <div class="m-play-list" ref="playList">
           <ul>
             <li
               v-for="item in getSongList"
@@ -184,6 +191,9 @@ export default {
       isShowList: false,
       modelNum: 2,
       randomList: [],
+      isRandom: true,
+      isShowLyric: false,
+      pattern: /\[\d{2}:\d{2}\.\d{3}\]/g,
       modelIcon: [
         {
           icon: '&#xe66c;',
@@ -212,6 +222,19 @@ export default {
     getMusicUrl() {
       return this.$store.state.playing.musicUrl;
     },
+    getMusicLyric() {
+      let lyric = this.$store.state.playing.musicLyric;
+      let arr = lyric.replace(this.pattern,',')
+      console.log(arr.split(',').length);
+      
+      return arr.split(',');
+    },
+    getMusicLyricTime() {
+      let lyric = this.$store.state.playing.musicLyric;
+      let arr = lyric.match(this.pattern)
+      
+      return arr;
+    },
     info() {
       return this.$store.state.playing.info;
     },
@@ -234,13 +257,14 @@ export default {
       this.input.onMouseDown = function() {
         console.log("4141312");
       };
+      this.getRandomList();
     });
+
   },
   methods: {
     goSinger(item){
       this.$store.commit('playing/getHidePlaying')
       this.$router.push({name: 'singerDetails', query:{id: item.id}})
-      
     },
     handleMousedown(e) {
       this.seeking = true;
@@ -250,7 +274,7 @@ export default {
       this.player = parseFloat(e.target.value);
     },
     getEnded(e) {
-      console.log("结束");
+      this.handleChangePlay('next')
     },
     handleBack() {
       this.$store.commit("playing/getHidePlaying");
@@ -258,20 +282,13 @@ export default {
     getDuration(e) {
       this.duration = this.audio.duration;
     },
-    getPlayScroll(row){
-
-    },
     // 滑动播放位置触发
     handleChange(e) {
-      // console.log(e);
-
       this.audio.currentTime = this.duration * +e.target.value;
       this.played = parseFloat(e.target.value);
-      // e.target.onMouseDown = this.handleMousedown(e);
-      // e.target.onMouseUp = this.handleMouseUp(e);
     },
-    handleProgress(e) {
-      console.log(e);
+    handleChangeLyric(){
+      this.isShowLyric = !this.isShowLyric;
     },
     format(seconds) {
       const date = new Date(seconds * 1000);
@@ -287,28 +304,42 @@ export default {
       return `0${string}`.slice(-2);
     },
     getTimeupdate(row) {
+      console.log(row.target.currentTime);
+      
       if (!this.seeking) {
         this.played = row.target.currentTime
           ? row.target.currentTime / this.duration
           : 0;
       }
     },
-    
-    
+    //切换播放模式
     handleModel(){
       this.modelNum++;
       if(this.modelNum > 2){
         this.modelNum = 0;
       }
+      this.getRandomList();
       this.$toast(this.modelIcon[this.modelNum].text);
     },
+    // 获取随机播放的列表
+    getRandomList(){
+      if(this.modelNum === 2){
+        this.getSongList.forEach((item,idx) => {
+          this.randomList.push(idx)
+        })
+      }
+      this.randomList.sort((a,b) => {
+        return Math.random()>.5 ? -1 : 1;
+      })
+    },
+    // 展示歌单列表
     handleShowList(){
       this.isShowList = true;
       this.$nextTick(() => {
-        console.log(this.$refs.playItem[0].offsetTop);
         this.$refs.playList && this.$refs.playItem &&  (this.$refs.playList.scrollTop = (this.$refs.playItem[0].offsetTop - 150));
       })
     },
+    // 选中歌曲
     handleSong(row, isPlay){
       const data = Object.assign({}, row.al, { singer: row.ar });
       data.id = row.id;
@@ -316,13 +347,12 @@ export default {
       this.isShowList = false;
       this.$store.commit('playing/setSongInfo', data);
       this.$store.dispatch('playing/getSongUrlData');
+      this.$store.dispatch('playing/getSongLyricData');
       this.$store.commit('playing/setIsPlay', true)
     },
+    // 播放切换
     handleChangePlay(type) {
       let index = 0;
-      let randomNum = Math.floor(Math.random() * this.getSongList.length);
-      console.log(randomNum,'aaaaaaaaaaa');
-      
       this.getSongList.forEach((item,idx) => {
         if(item.id === this.info.id){
           switch (type) {
@@ -334,17 +364,10 @@ export default {
                   index = idx + 1
                 }
               }else {
-                index = randomNum;
-                if(this.randomList.length > 0){
-                  if(this.randomList.indexOf(randomNum) < 0){
-                    this.randomList.push(randomNum)
-                  }else{
-                    // if(this.randomList[this.randomList.indexOf(randomNum) + 1]){
-                    //   index = this.randomList[this.randomList.indexOf(idx) + 1]
-                    // }
-                  }
-                }else{
-                  this.randomList.push(idx)
+                if(this.randomList.indexOf(idx) === this.randomList.length - 1){
+                  index = this.randomList[0];
+                }else {
+                  index = this.randomList[this.randomList.indexOf(idx) + 1]
                 }
               }
               break;
@@ -356,27 +379,19 @@ export default {
                   index = idx - 1
                 }
               }else {
-                index = randomNum;
-                if(this.randomList.length > 0){
-                  if(this.randomList.indexOf(randomNum) < 0){
-                    this.randomList.unshift(randomNum)
-                  }else {
-                    if(this.randomList[this.randomList.indexOf(randomNum) - 1]){
-                      index = this.randomList[this.randomList.indexOf(idx) - 1]
-                    }
-                  }
-                }else{
-                  this.randomList.push(idx)
+                if(this.randomList.indexOf(idx) === 0){
+                  index = this.randomList[this.randomList.length - 1];
+                }else {
+                  index = this.randomList[this.randomList.indexOf(idx) - 1];
                 }
               }
               break;
           }
         }
       })
-      // console.log(index);
-      console.log(this.randomList);
       this.handleSong(this.getSongList[index])
     },
+    // 播放暂停
     handlePlay() {
       if (this.playing) {
         this.$store.commit('playing/setIsPlay', false)
@@ -435,7 +450,12 @@ export default {
     z-index: 3;
   }
   .m-song {
-    padding-top: 100px;
+    position: absolute;
+    left: 0;
+    top: 70px;
+    width: 100%;
+    height: 400px;
+    z-index: 4;
   }
   .m-needle {
     position: absolute;
@@ -455,7 +475,7 @@ export default {
     position: relative;
     width: 296px;
     height: 296px;
-    margin: 0 auto;
+    margin: 60px auto 0;
     background: rgba(255, 255, 255, 0.1);
     border-radius: 50%;
     z-index: 4;
@@ -479,6 +499,27 @@ export default {
         height: 200px;
         border-radius: 50%;
         overflow: hidden;
+      }
+    }
+  }
+  .m-song-lyric{
+    display: flex;
+    height: 400px;
+    width: 100%;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    ul{
+      width: 100%;
+    }
+    li{
+      width: 100%;
+      font-size: 14px;
+      color: #ccc;
+      padding: 10px 0;
+      text-align: center;
+      transition: .3s all linear;
+      &.active{
+        color: #fff;
       }
     }
   }

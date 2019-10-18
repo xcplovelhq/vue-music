@@ -106,6 +106,7 @@ export default {
       this.$store.commit('playing/setSongInfo', data);
       this.$store.commit('playing/getShowPlaying');
       this.$store.dispatch('playing/getSongUrlData');
+      this.$store.dispatch('playing/getSongLyricData');
     },
   },
 };

@@ -1,4 +1,4 @@
-import { getSongUrl } from '@/api/song.js';
+import { getSongUrl,getSongLyric } from '@/api/song.js';
 
 const state = {
   isShowPlaying: false, // 是否弹出播放界面
@@ -6,6 +6,7 @@ const state = {
   musicUrl: '',
   info: {},
   songList: [],
+  musicLyric: ''
 };
 
 const mutations = {
@@ -26,6 +27,9 @@ const mutations = {
   },
   setIsPlay: (state, data) => {
     state.isPlay = data
+  },
+  setMusicLyric: (state, data) => {
+    state.musicLyric = data
   }
 };
 const actions = {
@@ -34,7 +38,11 @@ const actions = {
       commit('setMusicUrl', data.data[0].url);
     });
   },
-  
+  getSongLyricData: ({ state, commit }, id) => {
+    getSongLyric(id || state.info.id).then(({ data }) => {
+      commit('setMusicLyric', data.lrc.lyric);
+    });
+  },
 };
 export default {
   namespaced: true,

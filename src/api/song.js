@@ -15,3 +15,11 @@ export const getSongUrl = async function (id) {
   });
   return res;
 };
+
+// 获取音乐歌词
+export const getSongLyric = async function (id) {
+  const res = await axios.get({
+    url: `/lyric?id=${id}`,
+  });
+  return res;
+};

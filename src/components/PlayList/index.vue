@@ -45,6 +45,7 @@ export default {
       this.$store.commit('playing/getShowPlaying');
       this.$store.commit('playing/setSongList', list);
       this.$store.dispatch('playing/getSongUrlData');
+      this.$store.dispatch('playing/getSongLyricData');
       this.$store.commit('playing/setIsPlay', true)
     },
     
