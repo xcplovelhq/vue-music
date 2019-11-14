@@ -225,8 +225,6 @@ export default {
     getMusicLyric() {
       let lyric = this.$store.state.playing.musicLyric;
       let arr = lyric.replace(this.pattern,',')
-      console.log(arr.split(',').length);
-      
       return arr.split(',');
     },
     getMusicLyricTime() {
@@ -304,8 +302,6 @@ export default {
       return `0${string}`.slice(-2);
     },
     getTimeupdate(row) {
-      console.log(row.target.currentTime);
-      
       if (!this.seeking) {
         this.played = row.target.currentTime
           ? row.target.currentTime / this.duration

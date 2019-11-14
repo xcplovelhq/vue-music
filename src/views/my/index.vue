@@ -22,7 +22,7 @@
               <template v-for="item in myPlayList">
                   <van-swipe-cell
                       :key="item.key"
-                      v-if="!item.subscribed">
+                      v-if="item.subscribedCount == 0">
                       <van-cell
                           :title="item.name"
                           :label="`${item.trackCount}首`"
@@ -44,7 +44,7 @@
               <template v-for="item in myPlayList">
                   <van-swipe-cell
                       :key="item.key"
-                      v-if="item.subscribed">
+                      v-if="item.subscribedCount > 0">
                       <van-cell
                           :title="item.name"
                           :label="`${item.trackCount}首${item.subscribed ? '，by ' + item.creator.nickname: ''}`"

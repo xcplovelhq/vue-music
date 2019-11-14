@@ -27,7 +27,7 @@
       @scroll-handler="getScroll"
       v-if="singerList.length > 0"
     >
-      <router-link :to="{name: 'songDetails', query: {id: item.id}}" class="m-list-item" v-for="item in singerList" :key="item.key">
+      <router-link :to="{name: 'singerDetails', query: {id: item.id}}" class="m-list-item" v-for="item in singerList" :key="item.key">
         <div class="m-avata">
           <img :src="item.img1v1Url" v-lazy="item.img1v1Url">
         </div>
